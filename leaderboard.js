@@ -3,9 +3,16 @@
 
 Players = new Meteor.Collection("players");
 
+// Check sort order before displaying the list of players,
+// display highest score first unless listByName is true.
 if (Meteor.isClient) {
   Template.leaderboard.players = function () {
-    return Players.find({}, {sort: {score: -1, name: 1}});
+    if(Session.get("listByName")) {
+      return Players.find({}, {sort: {name: 1, score: -1}});
+    }
+    else {
+      return Players.find({}, {sort: {score: -1, name: 1}});
+    }
   };
 
   Template.leaderboard.selected_name = function () {
@@ -20,6 +27,14 @@ if (Meteor.isClient) {
   Template.leaderboard.events({
     'click input.inc': function () {
       Players.update(Session.get("selected_player"), {$inc: {score: 5}});
+    },
+    'click input.reorder_list': function () {
+      if (Session.get("listByName")) { 
+        Session.set("listByName", false);
+      }
+      else {
+        Session.set("listByName", true);      
+      }
     }
   });
 

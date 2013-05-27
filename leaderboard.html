@@ -9,6 +9,11 @@
 </body>
 
 <template name="leaderboard">
+
+<!-- Add button to toggle order of list -->
+  <div class="sorting_list">
+    <input type="button" class="reorder_list" value="listByName">
+  </div>
   <div class="leaderboard">
     {{#each players}}
       {{> player}}
